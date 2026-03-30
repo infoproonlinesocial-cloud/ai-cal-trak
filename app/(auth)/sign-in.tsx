@@ -20,6 +20,7 @@ import { Link, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
 import { saveUserToFirestore } from "@/services/userService";
+import { Colors } from "@/constants/Colors";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -163,13 +164,13 @@ export default function SignInScreen() {
                   <Ionicons
                     name="mail-outline"
                     size={18}
-                    color={emailFocused ? "#4ADE80" : "#64748B"}
+                    color={emailFocused ? Colors.primary : Colors.textSecondary}
                     style={styles.inputIcon}
                   />
                   <TextInput
                     style={styles.input}
                     placeholder="you@example.com"
-                    placeholderTextColor="#4A5568"
+                    placeholderTextColor={Colors.textPlaceholder}
                     value={email}
                     onChangeText={setEmail}
                     autoCapitalize="none"
@@ -193,13 +194,13 @@ export default function SignInScreen() {
                   <Ionicons
                     name="lock-closed-outline"
                     size={18}
-                    color={passwordFocused ? "#4ADE80" : "#64748B"}
+                    color={passwordFocused ? Colors.primary : Colors.textSecondary}
                     style={styles.inputIcon}
                   />
                   <TextInput
                     style={styles.input}
                     placeholder="Enter your password"
-                    placeholderTextColor="#4A5568"
+                    placeholderTextColor={Colors.textPlaceholder}
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry={!showPassword}
@@ -214,7 +215,7 @@ export default function SignInScreen() {
                     <Ionicons
                       name={showPassword ? "eye-outline" : "eye-off-outline"}
                       size={18}
-                      color="#64748B"
+                      color={Colors.textSecondary}
                     />
                   </TouchableOpacity>
                 </View>
@@ -228,11 +229,11 @@ export default function SignInScreen() {
                 activeOpacity={0.85}
               >
                 {loading ? (
-                  <ActivityIndicator color="#0A0E1A" />
+                  <ActivityIndicator color={Colors.textDark} />
                 ) : (
                   <>
                     <Text style={styles.primaryBtnText}>Sign In</Text>
-                    <Ionicons name="arrow-forward" size={18} color="#0A0E1A" />
+                    <Ionicons name="arrow-forward" size={18} color={Colors.textDark} />
                   </>
                 )}
               </TouchableOpacity>
@@ -252,7 +253,7 @@ export default function SignInScreen() {
                 activeOpacity={0.85}
               >
                 {googleLoading ? (
-                  <ActivityIndicator color="#E2E8F0" />
+                  <ActivityIndicator color={Colors.text} />
                 ) : (
                   <>
                     <GoogleIcon />
@@ -292,7 +293,7 @@ function GoogleIcon() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#0A0E1A",
+    backgroundColor: Colors.background,
   },
   keyboardView: { flex: 1 },
   scroll: {
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: "rgba(74, 222, 128, 0.18)",
+    backgroundColor: Colors.primaryGlow,
     // soft glow ring
   },
   logo: {
@@ -329,14 +330,14 @@ const styles = StyleSheet.create({
   headline: {
     fontSize: 30,
     fontWeight: "800",
-    color: "#F8FAFC",
+    color: Colors.text,
     letterSpacing: -0.5,
     marginBottom: 8,
     textAlign: "center",
   },
   subheadline: {
     fontSize: 15,
-    color: "#64748B",
+    color: Colors.textSecondary,
     textAlign: "center",
     marginBottom: 32,
     lineHeight: 22,
@@ -345,10 +346,10 @@ const styles = StyleSheet.create({
   // Card
   card: {
     width: "100%",
-    backgroundColor: "rgba(255,255,255,0.05)",
+    backgroundColor: Colors.surface,
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.1)",
+    borderColor: Colors.border,
     padding: 24,
     marginBottom: 24,
   },
@@ -358,28 +359,28 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#94A3B8",
+    color: Colors.textMuted,
     marginBottom: 8,
     letterSpacing: 0.3,
   },
   inputWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.07)",
+    backgroundColor: Colors.surface,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.1)",
+    borderColor: Colors.border,
     paddingHorizontal: 14,
     height: 52,
   },
   inputWrapperFocused: {
-    borderColor: "#4ADE80",
-    backgroundColor: "rgba(74,222,128,0.06)",
+    borderColor: Colors.primary,
+    backgroundColor: Colors.primaryTransparent,
   },
   inputIcon: { marginRight: 10 },
   input: {
     flex: 1,
-    color: "#F8FAFC",
+    color: Colors.text,
     fontSize: 15,
     paddingVertical: 0,
   },
@@ -391,11 +392,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    backgroundColor: "#4ADE80",
+    backgroundColor: Colors.primary,
     borderRadius: 50,
     height: 54,
     marginTop: 8,
-    shadowColor: "#4ADE80",
+    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 12,
@@ -404,7 +405,7 @@ const styles = StyleSheet.create({
   primaryBtnText: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#0A0E1A",
+    color: Colors.textDark,
   },
   btnDisabled: { opacity: 0.6 },
 
@@ -417,11 +418,11 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: "rgba(255,255,255,0.08)",
+    backgroundColor: Colors.divider,
   },
   dividerText: {
     fontSize: 12,
-    color: "#475569",
+    color: Colors.textPlaceholder,
     marginHorizontal: 12,
     fontWeight: "500",
   },
@@ -435,26 +436,26 @@ const styles = StyleSheet.create({
     height: 54,
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.15)",
-    backgroundColor: "rgba(255,255,255,0.04)",
+    borderColor: Colors.border,
+    backgroundColor: Colors.surfaceDark,
   },
   googleBtnText: {
     fontSize: 15,
     fontWeight: "600",
-    color: "#E2E8F0",
+    color: Colors.text,
   },
   googleIconWrapper: {
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
     alignItems: "center",
     justifyContent: "center",
   },
   googleIconText: {
     fontSize: 14,
     fontWeight: "800",
-    color: "#4285F4",
+    color: Colors.googleBlue,
   },
 
   // Footer
@@ -463,10 +464,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  footerText: { fontSize: 14, color: "#64748B" },
+  footerText: { fontSize: 14, color: Colors.textSecondary },
   footerLink: {
     fontSize: 14,
-    color: "#4ADE80",
+    color: Colors.primary,
     fontWeight: "700",
   },
 });

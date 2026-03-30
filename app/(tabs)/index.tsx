@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Colors } from "@/constants/Colors";
 
 export default function HomeScreen() {
   const { signOut } = useAuth();
@@ -17,7 +18,7 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.iconContainer}>
-          <Ionicons name="nutrition" size={48} color="#4ADE80" />
+          <Ionicons name="nutrition" size={48} color={Colors.primary} />
         </View>
         <Text style={styles.greeting}>
           Welcome back{user?.firstName ? `, ${user.firstName}` : ""}! 👋
@@ -25,7 +26,7 @@ export default function HomeScreen() {
         <Text style={styles.sub}>Your AI Calorie Tracker is ready.</Text>
 
         <TouchableOpacity style={styles.signOutBtn} onPress={() => signOut()}>
-          <Ionicons name="log-out-outline" size={20} color="#0A0E1A" />
+          <Ionicons name="log-out-outline" size={20} color={Colors.textDark} />
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
@@ -34,7 +35,7 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#0A0E1A" },
+  container: { flex: 1, backgroundColor: Colors.background },
   content: {
     flex: 1,
     justifyContent: "center",
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     width: 96,
     height: 96,
     borderRadius: 48,
-    backgroundColor: "rgba(74,222,128,0.15)",
+    backgroundColor: Colors.primaryGlow,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 24,
@@ -53,13 +54,13 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 26,
     fontWeight: "700",
-    color: "#F8FAFC",
+    color: Colors.text,
     marginBottom: 8,
     textAlign: "center",
   },
   sub: {
     fontSize: 15,
-    color: "#64748B",
+    color: Colors.textSecondary,
     marginBottom: 40,
     textAlign: "center",
   },
@@ -67,10 +68,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    backgroundColor: "#4ADE80",
+    backgroundColor: Colors.primary,
     paddingVertical: 14,
     paddingHorizontal: 32,
     borderRadius: 50,
   },
-  signOutText: { fontSize: 16, fontWeight: "700", color: "#0A0E1A" },
+  signOutText: { fontSize: 16, fontWeight: "700", color: Colors.textDark },
 });

@@ -28,8 +28,17 @@ export default function ResultsScreen() {
   const { user } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [loadingInfo, setLoadingInfo] = useState("Gathering your profile...");
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isAIComplete, setIsAIComplete] = useState(false);
   const [plan, setPlan] = useState<NutritionPlan | null>(null);
+
+  const steps = [
+    "Gathering your profile...",
+    "Analyzing body metrics...",
+    "Calculating daily calorie needs...",
+    "Optimizing macronutrients...",
+    "Finalizing your personalized plan...",
+  ];
 
   useEffect(() => {
     if (user) {
@@ -37,15 +46,35 @@ export default function ResultsScreen() {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!loading) return;
+
+    const timer = setInterval(() => {
+      setCurrentStep((prev) => {
+        // Stop at the second to last step if AI isn't ready
+        if (prev === steps.length - 2 && !isAIComplete) {
+          return prev;
+        }
+        // If we reach the last step and AI is ready, finish loading after a brief delay
+        if (prev === steps.length - 1) {
+          clearInterval(timer);
+          setTimeout(() => setLoading(false), 800);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 1500);
+
+    return () => clearInterval(timer);
+  }, [loading, isAIComplete]);
+
   const fetchAndGeneratePlan = async () => {
     try {
-      setLoading(true);
-      setLoadingInfo("Fetching your data...");
-      
       const profile = await getUserProfile(user!.id);
       
       if (!profile) {
-        setLoadingInfo("Profile not found. Please complete onboarding.");
+        setLoading(false); // Handle error case
+        router.replace("/onboarding");
         return;
       }
 
@@ -59,36 +88,76 @@ export default function ResultsScreen() {
           waterIntake: profile.waterIntake || 0,
           fitnessResponse: profile.fitnessResponse || "",
         });
-        setLoading(false);
+        setIsAIComplete(true);
         return;
       }
 
       // Otherwise generate new plan
-      setLoadingInfo("AI is calculating your daily needs...");
       const generatedPlan = await generateNutritionPlan(profile);
-      
-      setLoadingInfo("Optimizing your macro distribution...");
       setPlan(generatedPlan);
 
-      setLoadingInfo("Saving your personalized plan...");
       await updateOnboardingData(user!.id, {
         ...generatedPlan,
         isOnboardingComplete: true,
       });
 
-      setLoading(false);
+      setIsAIComplete(true);
     } catch (error) {
       console.error("Error in results screen:", error);
-      setLoadingInfo("Something went wrong. Please try again.");
+      // In case of error, we might want to show an error state
+      setIsAIComplete(true); // Still allow timer to finish or show error
     }
   };
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-        <Text style={styles.loadingText}>{loadingInfo}</Text>
-      </View>
+      <SafeAreaView style={styles.loadingContainer}>
+        <View style={styles.loadingContent}>
+          <View style={styles.loadingHeader}>
+            <ActivityIndicator size="small" color={Colors.primary} />
+            <Text style={styles.loadingTitle}>Generating your plan</Text>
+          </View>
+          
+          <View style={styles.stepsContainer}>
+            {steps.map((step, index) => {
+              const isCompleted = index < currentStep;
+              const isActive = index === currentStep;
+              
+              return (
+                <Animated.View 
+                  key={index} 
+                  entering={FadeInDown.delay(index * 100)}
+                  style={[
+                    styles.stepItem,
+                    isCompleted && styles.stepItemCompleted,
+                    isActive && styles.stepItemActive
+                  ]}
+                >
+                  <View style={[
+                    styles.stepIcon,
+                    isCompleted && styles.stepIconCompleted
+                  ]}>
+                    {isCompleted ? (
+                      <Tick01Icon size={16} color={Colors.textDark} />
+                    ) : isActive ? (
+                      <ActivityIndicator size="small" color={Colors.primary} />
+                    ) : (
+                      <View style={styles.stepDot} />
+                    )}
+                  </View>
+                  <Text style={[
+                    styles.stepText,
+                    isCompleted && styles.stepTextCompleted,
+                    isActive && styles.stepTextActive
+                  ]}>
+                    {step}
+                  </Text>
+                </Animated.View>
+              );
+            })}
+          </View>
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -264,15 +333,72 @@ const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     backgroundColor: Colors.background,
+    justifyContent: "center",
+    padding: 24,
+  },
+  loadingContent: {
+    backgroundColor: Colors.surface,
+    borderRadius: 32,
+    padding: 32,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  loadingHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginBottom: 32,
+  },
+  loadingTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: Colors.text,
+  },
+  stepsContainer: {
+    gap: 20,
+  },
+  stepItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    opacity: 0.4,
+  },
+  stepItemActive: {
+    opacity: 1,
+  },
+  stepItemCompleted: {
+    opacity: 0.8,
+  },
+  stepIcon: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: Colors.border,
     alignItems: "center",
     justifyContent: "center",
-    padding: 40,
   },
-  loadingText: {
-    marginTop: 20,
+  stepIconCompleted: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
+  stepDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: Colors.textSecondary,
+  },
+  stepText: {
+    fontSize: 15,
+    color: Colors.textSecondary,
+    fontWeight: "500",
+  },
+  stepTextActive: {
     color: Colors.text,
-    fontSize: 16,
     fontWeight: "600",
-    textAlign: "center",
+  },
+  stepTextCompleted: {
+    color: Colors.text,
+    textDecorationLine: "none", // Could use 'line-through' if preferred, but usually 'none' is cleaner
   },
 });

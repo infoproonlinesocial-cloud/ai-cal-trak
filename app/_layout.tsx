@@ -41,7 +41,9 @@ function InitialLayout() {
         const inOnboarding = segments[0] === "onboarding";
 
         if (completed) {
-          if (inAuthGroup || inOnboarding) {
+          // If at auth, onboarding, or root index, go to tabs
+          const isAtRoot = !segments[0];
+          if (inAuthGroup || inOnboarding || isAtRoot) {
             router.replace("/(tabs)");
           }
         } else {

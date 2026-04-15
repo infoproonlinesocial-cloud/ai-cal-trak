@@ -1,15 +1,16 @@
-import { Tabs } from "expo-router";
-import { View, TouchableOpacity, StyleSheet, Platform } from "react-native";
-import { 
-  Home01Icon, 
-  ChartBarLineIcon, 
-  UserIcon, 
-  Add01Icon 
-} from "hugeicons-react-native";
 import { Colors } from "@/constants/Colors";
-import { BlurView } from 'expo-blur';
+import { Tabs, useRouter } from "expo-router";
+import {
+  Add01Icon,
+  ChartBarLineIcon,
+  Home01Icon,
+  Task01Icon,
+  UserIcon
+} from "hugeicons-react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function TabsLayout() {
+  const router = useRouter();
   return (
     <Tabs
       screenOptions={{
@@ -47,14 +48,49 @@ export default function TabsLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="log"
+        options={{
+          title: "Log",
+          tabBarIcon: ({ color }) => (
+            <Task01Icon size={24} color={color} variant="stroke" />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="log-exercise"
+        options={{
+          href: null,
+        }}
+      />
+
+      <Tabs.Screen
+        name="manual-calories"
+        options={{
+          href: null,
+          tabBarStyle: { display: 'none' },
+        }}
+      />
+
+      <Tabs.Screen
+        name="exercise-details"
+        options={{
+          href: null,
+          tabBarStyle: { display: 'none' },
+        }}
+      />
+
+
       <Tabs.Screen
         name="plus"
         options={{
           title: "Add",
           tabBarButton: (props) => (
-            <TouchableOpacity 
+            <TouchableOpacity
               activeOpacity={0.7}
-              onPress={props.onPress}
+              onPress={() => router.push("/(tabs)/plus")}
               style={styles.fabButton}
             >
               <View style={styles.fabInner}>

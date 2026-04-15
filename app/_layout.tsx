@@ -6,6 +6,7 @@ import { ActivityIndicator, View } from "react-native";
 import { saveUserToFirestore, getUserProfile } from "@/services/userService";
 import { Colors } from "@/constants/Colors";
 import { useState } from "react";
+import { DateProvider } from "@/context/DateContext";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY as string;
 
@@ -85,12 +86,14 @@ function InitialLayout() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
-      <Stack.Screen name="results" options={{ headerShown: false }} />
-    </Stack>
+    <DateProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="results" options={{ headerShown: false }} />
+      </Stack>
+    </DateProvider>
   );
 }
 

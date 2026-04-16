@@ -163,7 +163,9 @@ export default function HomeScreen() {
                 </View>
 
                 <View style={styles.logActions}>
-                  <Text style={styles.logCalories}>{log.calories} kcal</Text>
+                  <Text style={styles.logCalories}>
+                    {log.type === "water" ? `${log.quantity} ml` : `${log.calories} kcal`}
+                  </Text>
                   <View style={styles.actionButtons}>
                     <TouchableOpacity
                       onPress={() => handleEditLog(log)}

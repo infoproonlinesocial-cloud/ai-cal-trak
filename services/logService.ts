@@ -15,12 +15,13 @@ export interface ActivityLog {
   id?: string;
   userId: string;
   date: string; // YYYY-MM-DD
-  type: "food" | "exercise";
+  type: "food" | "exercise" | "water";
   name: string;
   calories: number;
   protein: number;
   carbs: number;
   fat: number;
+  quantity?: number; // ml for water
   timestamp?: any;
 }
 

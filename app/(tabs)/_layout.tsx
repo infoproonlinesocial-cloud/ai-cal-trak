@@ -82,6 +82,14 @@ export default function TabsLayout() {
         }}
       />
 
+      <Tabs.Screen
+        name="add-water"
+        options={{
+          href: null,
+          tabBarStyle: { display: 'none' },
+        }}
+      />
+
 
       <Tabs.Screen
         name="plus"

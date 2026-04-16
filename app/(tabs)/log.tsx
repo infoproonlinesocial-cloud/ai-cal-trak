@@ -54,6 +54,11 @@ export default function LogScreen() {
             router.push('/(tabs)/log-exercise');
             return;
         }
+
+        if (option === "Add Drink Water") {
+            router.push('/(tabs)/add-water');
+            return;
+        }
         
         console.log(`Pressed: ${option}`);
     };

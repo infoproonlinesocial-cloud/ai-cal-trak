@@ -59,6 +59,11 @@ export default function LogScreen() {
             router.push('/(tabs)/add-water');
             return;
         }
+
+        if (option === "Food Database") {
+            router.push('/(tabs)/food-database');
+            return;
+        }
         
         console.log(`Pressed: ${option}`);
     };

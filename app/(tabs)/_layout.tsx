@@ -90,6 +90,22 @@ export default function TabsLayout() {
         }}
       />
 
+      <Tabs.Screen
+        name="food-database"
+        options={{
+          href: null,
+          tabBarStyle: { display: 'none' },
+        }}
+      />
+
+      <Tabs.Screen
+        name="log-food-details"
+        options={{
+          href: null,
+          tabBarStyle: { display: 'none' },
+        }}
+      />
+
 
       <Tabs.Screen
         name="plus"
